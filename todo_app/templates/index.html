@@ -10,11 +10,21 @@
   <div class="row">
     <div class="col-md-12">
       <h2>Items</h2>
-      <ul class="list-group mb-4">
-        {% for item in to_do_items %}
-          <li>{{ item.title }}</li>
+      <table>
+        {% for card in cards %}
+          <tr>
+            <td>{{ card.name }}</td>
+            <td>{{ card.status }}</td>
+            {% if card.status == 'To Do' or card.status == 'Doing' %}
+            <td>
+              <form action="{{ url_for('update_status', card_id=card.id, current_list=card.status)}}" method="post">
+                <input type="submit" value="Update Status"/>
+              </form>
+            </td>
+            {% endif %}
+          </tr>
         {% endfor %}
-      </ul>
+      </table>
     </div>
   </div>
 
