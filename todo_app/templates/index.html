@@ -10,18 +10,37 @@
   <div class="row">
     <div class="col-md-12">
       <h2>Items</h2>
+      <h3>To Do</h3>
       <table>
-        {% for card in cards %}
+        {% for card in view_model.to_do_items %}
           <tr>
             <td>{{ card.name }}</td>
-            <td>{{ card.status }}</td>
-            {% if card.status == 'To Do' or card.status == 'Doing' %}
             <td>
               <form action="{{ url_for('update_status', card_id=card.id, current_list=card.status)}}" method="post">
                 <input type="submit" value="Update Status"/>
               </form>
             </td>
-            {% endif %}
+          </tr>
+        {% endfor %}
+      </table>
+      <h3>Doing</h3>
+      <table>
+        {% for card in view_model.doing_items %}
+          <tr>
+            <td>{{ card.name }}</td>
+            <td>
+              <form action="{{ url_for('update_status', card_id=card.id, current_list=card.status)}}" method="post">
+                <input type="submit" value="Update Status"/>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+      <h3>Done</h3>
+      <table>
+        {% for card in view_model.done_items %}
+          <tr>
+            <td>{{ card.name }}</td>
           </tr>
         {% endfor %}
       </table>
