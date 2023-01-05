@@ -23,7 +23,6 @@ list_query_params = query_params = dict(base_query_params, **{'cards': 'open'})
 @app.route('/')
 def index():
     lists = requests.get(list_url, list_query_params).json()
-    print(lists)
     nested_cards = [[Item.from_trello_card(card, list) for card in list['cards']] for list in lists]
     cards = list(chain.from_iterable(nested_cards))
     return render_template('index.html', cards = cards)
@@ -39,7 +38,6 @@ def submit_form():
 @app.route('/update-status/<card_id>/<current_list>', methods=["POST"])
 def update_status(card_id, current_list):
     url = f'{base_url}/cards/{card_id}'
-    print(url)
     if current_list == 'To Do':
         query_params = dict(base_query_params, **{'idList': os.getenv('DOING_LIST_ID')})
         requests.put(url, query_params)
