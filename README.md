@@ -56,3 +56,10 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+## Running the Tests
+
+Once the all dependencies have been installed, you can run all tests with:
+```bash
+$ poetry run pytest
+```

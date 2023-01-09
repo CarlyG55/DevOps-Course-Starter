@@ -1,48 +1,32 @@
 from flask import Flask, redirect, render_template, request
-from itertools import chain
 from todo_app.flask_config import Config
-from todo_app.Item import Item
+from todo_app.models.ViewModel import ViewModel
+from todo_app.data.trello_items import get_cards, add_card, move_card_to_list
 import os
-import requests
 
-app = Flask(__name__)
-app.config.from_object(Config())
+def create_app():
 
-board_id = os.getenv('BOARD_ID')
-api_key = os.getenv('API_KEY')
-token = os.getenv('TOKEN')
-base_url = f'https://api.trello.com/1'
-base_query_params = {
-    'key': api_key,
-    'token': token,
-    'cards': 'open',
-}
-list_url = f'{base_url}/boards/{board_id}/lists'
-list_query_params = query_params = dict(base_query_params, **{'cards': 'open'})
+    app = Flask(__name__)
+    app.config.from_object(Config())
 
-@app.route('/')
-def index():
-    lists = requests.get(list_url, list_query_params).json()
-    nested_cards = [[Item.from_trello_card(card, list) for card in list['cards']] for list in lists]
-    cards = list(chain.from_iterable(nested_cards))
-    return render_template('index.html', cards = cards)
+    @app.route('/')
+    def index():
+        cards_view_model = ViewModel(get_cards())
+        return render_template('index.html', view_model = cards_view_model)
 
 
-@app.route('/submit', methods=["POST"])
-def submit_form():
-    url = f'{base_url}/cards'
-    query_params = dict(base_query_params, **{'name': request.form.get('title'), 'idList': os.getenv('TO_DO_LIST_ID')})
-    requests.post(url, query_params)
-    return redirect('/')
+    @app.route('/submit', methods=["POST"])
+    def submit_form():
+        name = request.form.get('title')
+        add_card(name)
+        return redirect('/')
 
-@app.route('/update-status/<card_id>/<current_list>', methods=["POST"])
-def update_status(card_id, current_list):
-    url = f'{base_url}/cards/{card_id}'
-    if current_list == 'To Do':
-        query_params = dict(base_query_params, **{'idList': os.getenv('DOING_LIST_ID')})
-        requests.put(url, query_params)
-    if current_list == 'Doing':
-        query_params = dict(base_query_params, **{'idList': os.getenv('DONE_LIST_ID')})
-        requests.put(url, query_params)
-
-    return redirect('/')
+    @app.route('/update-status/<card_id>/<current_list>', methods=["POST"])
+    def update_status(card_id, current_list):
+        if current_list == 'To Do':
+            move_card_to_list(card_id, os.getenv('DOING_LIST_ID'))
+        if current_list == 'Doing':
+            move_card_to_list(card_id, os.getenv('DONE_LIST_ID'))
+        return redirect('/')
+    
+    return app
