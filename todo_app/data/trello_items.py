@@ -3,19 +3,6 @@ import requests
 from itertools import chain
 from todo_app.models.Item import Item
 
-
-board_id = os.getenv('BOARD_ID')
-api_key = os.getenv("API_KEY")
-token = os.getenv("TOKEN")
-base_url = f'https://api.trello.com/1'
-base_query_params = {
-    'key': api_key,
-    'token': token,
-    'cards': 'open',
-}
-list_url = f'{base_url}/boards/{board_id}/lists'
-base_query_string = f'?key={api_key}&token={token}&cards=open'
-
 def get_cards():
   lists = requests.get(f'https://api.trello.com/1/boards/{os.getenv("BOARD_ID")}/lists?key={os.getenv("API_KEY")}&token={os.getenv("TOKEN")}&cards=open').json()
   nested_cards = [[Item.from_trello_card(card, list) for card in list['cards']] for list in lists]

@@ -30,14 +30,9 @@ class StubResponse():
     return self.fake_response_data
   
 def get_lists_stub(url):
-  test_board_id = os.environ.get('BOARD_ID')
-  test_key = os.environ.get('API_KEY')
-  test_token = os.environ.get('TOKEN')
   fake_response_data = None
-  query_string = f'?key={test_key}&token={test_token}&cards=open'
-  print(url)
-  if url == f'https://api.trello.com/1/boards/{test_board_id}/lists{query_string}':
-    print('here')
+  query_string = f'?key={os.environ.get("API_KEY")}&token={os.environ.get("TOKEN")}&cards=open'
+  if url == f'https://api.trello.com/1/boards/{os.environ.get("BOARD_ID")}/lists{query_string}':
     fake_response_data = [{
       'id': '123abc',
       'name': 'To Do',
