@@ -38,7 +38,7 @@ The `.env` file is used by flask to set environment variables when running `flas
 
 This app uses a Trello board to store the items. You should set up a Trello board, with three lists for 'To Do', 'Doing' and 'Done'. Update your `.env` file with the board and list id's, as well as your Trello API Key and Token.
 
-## Running the App
+## Running the App locally
 
 Once the all dependencies have been installed, start the Flask app in development mode within the Poetry environment by running:
 ```bash
@@ -63,6 +63,34 @@ Run the following command on the control node:
 ```
 ansible-playbook ansible-playbook.yml -i ansible-inventory
 ```
+
+## Running the App in a Docker Container - Development mode
+
+To create the image, run the command:
+```
+docker build --target development --tag todo-app:dev .
+```
+
+Then to run the container, run:
+```
+docker run --env-file .env -p 8080:5000 --mount type=bind,source="$(pwd)"/todo_app,target=/app/todo_app todo-app:dev
+```
+
+You can then find the app on [`http://localhost:8080/`](http://localhost:8080/)
+
+## Running the App in a Docker Container - Production mode
+
+To create the image, run the command:
+```
+docker build --target production --tag todo-app:prod .
+```
+
+Then to run the container, run:
+```
+docker run -p 8080:8000 --env-file .env todo-app:prod
+```
+
+You can then find the app on [`http://localhost:8080/`](http://localhost:8080/)
 
 ## Running the Tests
 
