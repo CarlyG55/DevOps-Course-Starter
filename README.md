@@ -107,7 +107,7 @@ To create the image run
 $ docker build --target test --tag my-test-image .
 ```
 
-then to run the tests, run
+then to run the tests run
 ```bash
 $ docker run my-test-image
 ```
