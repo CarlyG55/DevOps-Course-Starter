@@ -45,7 +45,7 @@ Once the all dependencies have been installed, start the Flask app in developmen
 $ poetry run flask run
 ```
 
-You should see output similar to the following:
+You should see output similar to the following
 ```bash
  * Serving Flask app "app" (lazy loading)
  * Environment: development
