@@ -2,10 +2,10 @@ name: Continuous Integration
 on: 
   push:
     paths-ignore:
-    - 'README.MD'
+    - 'README.md'
   pull_request:
     paths-ignore:
-    - 'README.MD'
+    - 'README.md'
 jobs:
   build:
     name: Build and test
