@@ -101,7 +101,7 @@ $ poetry run pytest
 
 ## Running the tests in Docker
 
-To create the image, run
+To create the image run
 
 ```bash
 $ docker build --target test --tag my-test-image .
