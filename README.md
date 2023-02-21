@@ -98,3 +98,16 @@ Once the all dependencies have been installed, you can run all tests with:
 ```bash
 $ poetry run pytest
 ```
+
+## Running the tests in Docker
+
+To create the image, run
+
+```bash
+$ docker build --target test --tag my-test-image .
+```
+
+then to run the tests, run
+```bash
+$ docker run my-test-image
+```
