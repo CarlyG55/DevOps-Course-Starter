@@ -37,3 +37,6 @@ jobs:
 
       - name: Push production app to Docker Hub
         run: docker push cargil/todo-app:${{ github.sha }} && docker push cargil/todo-app:latest
+
+      - name: Call azure webhook
+        run: curl -dH -X POST ${{ secrets.AZURE_WEBHOOK }}
