@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, request
 from todo_app.flask_config import Config
 from todo_app.models.ViewModel import ViewModel
-from todo_app.data.trello_items import get_cards, add_card, move_card_to_list
+from todo_app.data.db_items import get_cards, add_card, change_card_status
 import os
 
 def create_app():
@@ -24,9 +24,9 @@ def create_app():
     @app.route('/update-status/<card_id>/<current_list>', methods=["POST"])
     def update_status(card_id, current_list):
         if current_list == 'To Do':
-            move_card_to_list(card_id, os.getenv('DOING_LIST_ID'))
+            change_card_status(card_id, "Doing")
         if current_list == 'Doing':
-            move_card_to_list(card_id, os.getenv('DONE_LIST_ID'))
+            change_card_status(card_id, "Done")
         return redirect('/')
     
     return app
